@@ -1,6 +1,7 @@
 sketchpad = document.querySelector("#sketchpad");
 let canvasSize = 16;
 let selectedColour = "blue";
+const paletteColours = ["red", "blue", "green", "yellow", "white", "black"];
 
 function getSelectedColor()
 {
@@ -14,9 +15,14 @@ function setSelectedColour(e)
 }
 
 function drawCell(e) {
-    console.log(e.target);
     e.target.style.backgroundColor = getSelectedColor();
 
+}
+
+function refreshCanvas(e)
+{
+    console.log(e.target);
+    generateCanvas(canvasSize);
 }
 
 function populateRow(columns)
@@ -54,19 +60,10 @@ function populatePalette()
 {
     let colourPalette = document.createElement('div');
 
-    let colourRed = createPaletteColour("red");
-    let colourBlue = createPaletteColour("blue");
-    let colourGreen = createPaletteColour("green");
-    let colourYellow = createPaletteColour("yellow");
-    let colourWhite = createPaletteColour("white");
-    let colourBlack = createPaletteColour("black");
-
-    colourPalette.appendChild(colourRed);
-    colourPalette.appendChild(colourBlue);
-    colourPalette.appendChild(colourGreen);
-    colourPalette.appendChild(colourYellow);
-    colourPalette.appendChild(colourWhite);
-    colourPalette.appendChild(colourBlack);
+    for(let i = 0; i < paletteColours.length; i++)
+    {
+        colourPalette.appendChild(createPaletteColour(paletteColours[i]));
+    }
 
     return colourPalette;
 }
@@ -74,10 +71,12 @@ function populatePalette()
 function generateControls() {
     let controlDash = document.createElement('div');
     controlDash.id = "controlDash";
-    let refreshBtn = document.createElement('button');
+
     colourPalette = populatePalette();
 
+    let refreshBtn = document.createElement('button');
     refreshBtn.textContent = "Refresh";
+    refreshBtn.addEventListener("mouseDown", refreshCanvas);
 
     controlDash.appendChild(refreshBtn);
     controlDash.appendChild(colourPalette);
