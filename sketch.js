@@ -7,6 +7,15 @@ const paletteColours = ["red",
                         "white",
                         "black"];
 let selectedColour = paletteColours[0];
+let mousedown = false;
+
+document.body.onmousedown = function() {
+    mousedown = true;
+}
+
+document.body.onmouseup = function() {
+    mousedown = false;
+}
 
 function getCanvasSize()
 {
@@ -37,8 +46,10 @@ function setSelectedColour(e)
 }
 
 function drawCell(e) {
-    e.target.style.backgroundColor = getSelectedColor();
-
+    if(mousedown)
+    {
+        e.target.style.backgroundColor = getSelectedColor();
+    }
 }
 
 function refreshCanvas()
