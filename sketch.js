@@ -1,7 +1,29 @@
 sketchpad = document.querySelector("#sketchpad");
 let canvasSize = 16;
-let selectedColour = "blue";
-const paletteColours = ["red", "blue", "green", "yellow", "white", "black"];
+const paletteColours = ["red",
+                        "blue",
+                        "green",
+                        "yellow",
+                        "white",
+                        "black"];
+let selectedColour = paletteColours[0];
+
+function getCanvasSize()
+{
+    return canvasSize;
+}
+
+function setCanvasSize(size)
+{
+    canvasSize = size;
+}
+
+function adjustCanvasSize()
+{
+    selection = document.getElementById("sizeSelection");
+    setCanvasSize(selection.options[selection.selectedIndex].value);
+    refreshCanvas();
+}
 
 function getSelectedColor()
 {
@@ -19,12 +41,11 @@ function drawCell(e) {
 
 }
 
-function refreshCanvas(e)
+function refreshCanvas()
 {
-    console.log(e.target);
     var element = document.getElementById("canvas");
     element.parentNode.removeChild(element);
-    generateCanvas(canvasSize);
+    generateCanvas(getCanvasSize());
 }
 
 function populateRow(columns)
@@ -45,7 +66,7 @@ function generateCanvas(rows) {
     let canvas = document.createElement('div');
     canvas.id = "canvas";
     for(let i=0; i < rows; i++) {
-        row = populateRow(canvasSize);
+        row = populateRow(getCanvasSize());
         canvas.appendChild(row);
     }
     sketchpad.appendChild(canvas);
@@ -74,20 +95,59 @@ function populatePalette()
     return colourPalette;
 }
 
+function populateSelection()
+{
+    canvasSizeControl = document.createElement('select');
+    canvasSizeControl.id = "sizeSelection";
+    for(let i = 8; i <= 64; i=i+4)
+    {
+        size = document.createElement('option');
+        size.textContent = i.toString();
+        size.id = i.toString() + "px";
+        canvasSizeControl.appendChild(size);
+    }
+
+    canvasSizeControl.addEventListener("change", adjustCanvasSize);
+    
+    return canvasSizeControl;
+}
+
+function setDefaultSizeSelection()
+{
+    currentSelection = document.getElementById("sizeSelection");
+
+    for(var i, j = 0; i = currentSelection.options[j]; j++)
+    {
+        if(i.value == getCanvasSize())
+        {
+            currentSelection.selectedIndex = j;
+            break;
+        }
+    }
+}
+
+
 function generateControls() {
     let controlDash = document.createElement('div');
     controlDash.id = "controlDash";
 
     colourPalette = populatePalette();
+    controlDash.appendChild(colourPalette);
 
-    let refreshBtn = document.createElement('button');
+    canvasSizeControl = populateSelection();
+    refreshBtn = document.createElement('button');
     refreshBtn.textContent = "Refresh";
     refreshBtn.addEventListener("click", refreshCanvas);
 
-    controlDash.appendChild(refreshBtn);
-    controlDash.appendChild(colourPalette);
+    toggles = document.createElement('div');
+    toggles.appendChild(canvasSizeControl);
+    toggles.appendChild(refreshBtn);
+
+    controlDash.appendChild(toggles);
+
     sketchpad.appendChild(controlDash);
+    setDefaultSizeSelection();
 }
 
 generateControls();
-generateCanvas(canvasSize);
+generateCanvas(getCanvasSize());
