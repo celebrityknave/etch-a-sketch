@@ -22,6 +22,8 @@ function drawCell(e) {
 function refreshCanvas(e)
 {
     console.log(e.target);
+    var element = document.getElementById("canvas");
+    element.parentNode.removeChild(element);
     generateCanvas(canvasSize);
 }
 
@@ -87,5 +89,5 @@ function generateControls() {
     sketchpad.appendChild(controlDash);
 }
 
-generateCanvas(canvasSize);
 generateControls();
+generateCanvas(canvasSize);
