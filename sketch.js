@@ -40,10 +40,13 @@ function populateRow(columns)
 }
 
 function generateCanvas(rows) {
+    let canvas = document.createElement('div');
+    canvas.id = "canvas";
     for(let i=0; i < rows; i++) {
         row = populateRow(canvasSize);
-        sketchpad.appendChild(row);
+        canvas.appendChild(row);
     }
+    sketchpad.appendChild(canvas);
 }
 
 function createPaletteColour(colour)
@@ -59,6 +62,7 @@ function createPaletteColour(colour)
 function populatePalette()
 {
     let colourPalette = document.createElement('div');
+    colourPalette.id = "colourPalette";
 
     for(let i = 0; i < paletteColours.length; i++)
     {
@@ -76,7 +80,7 @@ function generateControls() {
 
     let refreshBtn = document.createElement('button');
     refreshBtn.textContent = "Refresh";
-    refreshBtn.addEventListener("mouseDown", refreshCanvas);
+    refreshBtn.addEventListener("click", refreshCanvas);
 
     controlDash.appendChild(refreshBtn);
     controlDash.appendChild(colourPalette);
